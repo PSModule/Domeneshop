@@ -42,4 +42,10 @@ Describe 'Get-DomeneshopDomain' {
     It 'rejects non-positive domain IDs' {
         { Get-DomeneshopDomain -Context 'demo' -DomainID 0 } | Should -Throw
     }
+
+    It 'rejects whitespace-only domain filters' {
+        { Get-DomeneshopDomain -Context 'demo' -Domain ' ' } | Should -Throw
+
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
+    }
 }

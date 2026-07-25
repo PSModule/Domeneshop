@@ -39,6 +39,7 @@ function Get-DomeneshopDomain {
         # A domain-name filter for list requests.
         [Parameter(ParameterSetName = 'List')]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ -not [string]::IsNullOrWhiteSpace($_) })]
         [string] $Domain,
 
         # The numeric identifier of a specific domain.
