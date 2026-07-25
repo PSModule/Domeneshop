@@ -23,6 +23,9 @@ function Test-DomeneshopSecret {
 
         .NOTES
         Supported values are String and SecureString.
+
+        .LINK
+        https://psmodule.io/Domeneshop/Functions/Auth/Connect-DomeneshopAccount
     #>
     [OutputType([bool])]
     [CmdletBinding()]

@@ -25,7 +25,7 @@
         This command is retained as the module's baseline smoke-test command.
 
         .LINK
-        https://psmodule.io/Domeneshop/Functions/Get-PSModuleTest/
+        https://psmodule.io/Domeneshop/Functions/Get-PSModuleTest
 
         .LINK
         https://github.com/PSModule/Domeneshop

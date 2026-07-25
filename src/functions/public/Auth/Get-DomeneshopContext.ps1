@@ -32,7 +32,7 @@ function Get-DomeneshopContext {
         The configuration entry used to track the default is excluded from list output.
 
         .LINK
-        https://psmodule.io/Domeneshop/Functions/Get-DomeneshopContext/
+        https://psmodule.io/Domeneshop/Functions/Auth/Get-DomeneshopContext
 
         .LINK
         https://psmodule.io/Context/

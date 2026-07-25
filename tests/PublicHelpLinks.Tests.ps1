@@ -15,19 +15,28 @@ $testCases = Get-ChildItem -Path $publicFunctionsPath -Filter '*.ps1' -Recurse -
     ForEach-Object {
         @{
             FunctionName = $_.BaseName
+            Group        = if ($_.DirectoryName -eq $publicFunctionsPath) {
+                $null
+            } else {
+                Split-Path -Path $_.DirectoryName -Leaf
+            }
             Path         = $_.FullName
         }
     }
 
 Describe 'Public function help links' {
     It 'puts the canonical documentation link first for <FunctionName>' -ForEach $testCases {
-        param($FunctionName, $Path)
+        param($FunctionName, $Group, $Path)
 
         $content = Get-Content -Path $Path -Raw
         $links = [regex]::Matches($content, '(?ms)^\s*\.LINK\s*\r?\n\s*(?<Uri>\S+)')
+        $expectedLink = if ($Group) {
+            "https://psmodule.io/Domeneshop/Functions/$Group/$FunctionName"
+        } else {
+            "https://psmodule.io/Domeneshop/Functions/$FunctionName"
+        }
 
         $links.Count | Should -BeGreaterThan 0
-        $links[0].Groups['Uri'].Value |
-            Should -Be "https://psmodule.io/Domeneshop/Functions/$FunctionName/"
+        $links[0].Groups['Uri'].Value | Should -Be $expectedLink
     }
 }

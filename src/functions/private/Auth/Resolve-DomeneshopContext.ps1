@@ -25,6 +25,9 @@ function Resolve-DomeneshopContext {
         This helper never selects or defaults a context. Public commands own that behavior.
 
         .LINK
+        https://psmodule.io/Domeneshop/Functions/Auth/Get-DomeneshopContext
+
+        .LINK
         https://psmodule.io/Context/
     #>
     [OutputType([object])]

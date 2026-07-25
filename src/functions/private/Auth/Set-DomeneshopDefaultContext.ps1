@@ -27,6 +27,9 @@ function Set-DomeneshopDefaultContext {
         Supports WhatIf and Confirm before changing the module configuration.
 
         .LINK
+        https://psmodule.io/Domeneshop/Functions/Auth/Connect-DomeneshopAccount
+
+        .LINK
         https://psmodule.io/Context/
     #>
     [OutputType([void])]

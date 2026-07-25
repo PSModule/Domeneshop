@@ -23,6 +23,9 @@ function Test-DomeneshopContextName {
 
         .NOTES
         Throws when the context name is reserved.
+
+        .LINK
+        https://psmodule.io/Domeneshop/Functions/Auth/Connect-DomeneshopAccount
     #>
     [OutputType([bool])]
     [CmdletBinding()]

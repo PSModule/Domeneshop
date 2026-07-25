@@ -28,7 +28,7 @@ function Get-DomeneshopDomain {
         Uses the default context when Context is omitted.
 
         .LINK
-        https://psmodule.io/Domeneshop/Functions/Get-DomeneshopDomain/
+        https://psmodule.io/Domeneshop/Functions/Domains/Get-DomeneshopDomain
 
         .LINK
         https://api.domeneshop.no/docs/

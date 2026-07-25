@@ -27,6 +27,9 @@ function Get-DomeneshopConfig {
         This read helper does not create or update Context vault entries.
 
         .LINK
+        https://psmodule.io/Domeneshop/Functions/Auth/Get-DomeneshopContext
+
+        .LINK
         https://psmodule.io/Context/
     #>
     [OutputType([object])]

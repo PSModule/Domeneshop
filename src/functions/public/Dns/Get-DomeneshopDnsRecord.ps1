@@ -30,7 +30,7 @@ function Get-DomeneshopDnsRecord {
         Uses the default context when Context is omitted.
 
         .LINK
-        https://psmodule.io/Domeneshop/Functions/Get-DomeneshopDnsRecord/
+        https://psmodule.io/Domeneshop/Functions/Dns/Get-DomeneshopDnsRecord
 
         .LINK
         https://api.domeneshop.no/docs/
