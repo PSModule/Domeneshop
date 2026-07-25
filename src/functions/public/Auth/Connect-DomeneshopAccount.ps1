@@ -35,7 +35,7 @@ function Connect-DomeneshopAccount {
         Credentials are encrypted by the Context module.
 
         .LINK
-        https://psmodule.io/Domeneshop/Functions/Auth/Connect-DomeneshopAccount
+        https://psmodule.io/Domeneshop/Functions/Auth/Connect-DomeneshopAccount/
 
         .LINK
         https://api.domeneshop.no/docs/
