@@ -1,24 +1,61 @@
 function Add-DomeneshopForward {
     <#
         .SYNOPSIS
-        Adds an HTTP forward to a Domeneshop domain.
+        Add an HTTP forward to a Domeneshop domain.
+
+        .DESCRIPTION
+        Create an HTTP forward from the supplied Domeneshop API request object.
+
+        .EXAMPLE
+        Add-DomeneshopForward -DomainID 42 -Forward @{ host = 'www'; url = 'https://example.net' }
+
+        Add a www forward to domain 42.
+
+        .INPUTS
+        None
+
+        You can't pipe objects to Add-DomeneshopForward.
+
+        .OUTPUTS
+        System.Object
+
+        The response returned by the Domeneshop API.
+
+        .NOTES
+        Uses the default context when Context is omitted.
+
+        .LINK
+        https://api.domeneshop.no/docs/
     #>
     [OutputType([object])]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
+        # The numeric identifier of the domain that owns the forward.
         [Parameter(Mandatory)]
+        [ValidateRange(1, [int]::MaxValue)]
         [int] $DomainID,
 
+        # The HTTP forward request object accepted by the Domeneshop API.
         [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [object] $Forward,
 
+        # The stored credential context to use instead of the default.
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [string] $Context
     )
 
-    $resolvedContext = Resolve-DomeneshopContext -Context $Context
+    $storedContext = if ($PSBoundParameters.ContainsKey('Context')) {
+        Get-DomeneshopContext -Context $Context
+    } else {
+        Get-DomeneshopContext
+    }
+    $resolvedContext = Resolve-DomeneshopContext -Context $storedContext
     $apiBaseUri = Get-DomeneshopApiBaseUri -Context $resolvedContext
     $uri = "$apiBaseUri/domains/$DomainID/forwards/"
 
-    Invoke-DomeneshopApiRequest -Method Post -Uri $uri -Context $resolvedContext -Body $Forward
+    if ($PSCmdlet.ShouldProcess("Domain [$DomainID] HTTP forwards", 'Add HTTP forward')) {
+        Invoke-DomeneshopApiRequest -Method Post -Uri $uri -Context $resolvedContext -Body $Forward
+    }
 }

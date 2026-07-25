@@ -5,35 +5,78 @@ function Get-DomeneshopDnsRecord {
 
         .DESCRIPTION
         Lists DNS records for a domain, or gets one DNS record by ID.
+
+        .EXAMPLE
+        Get-DomeneshopDnsRecord -DomainID 42
+
+        List every DNS record for domain 42.
+
+        .EXAMPLE
+        Get-DomeneshopDnsRecord -DomainID 42 -RecordID 7
+
+        Get DNS record 7 from domain 42.
+
+        .INPUTS
+        None
+
+        You can't pipe objects to Get-DomeneshopDnsRecord.
+
+        .OUTPUTS
+        System.Object[]
+
+        The matching Domeneshop DNS records.
+
+        .NOTES
+        Uses the default context when Context is omitted.
+
+        .LINK
+        https://api.domeneshop.no/docs/
     #>
     [OutputType([object[]])]
     [CmdletBinding(DefaultParameterSetName = 'List')]
     param(
+        # The numeric identifier of the domain that owns the records.
         [Parameter(Mandatory)]
+        [ValidateRange(1, [int]::MaxValue)]
         [int] $DomainID,
 
-        [Parameter(Mandatory, ParameterSetName = 'GetByID')]
+        # The numeric identifier of a specific DNS record.
+        [Parameter(Mandatory, ParameterSetName = 'Get by ID')]
+        [ValidateRange(1, [int]::MaxValue)]
         [int] $RecordID,
 
+        # A host-name filter for list requests.
         [Parameter(ParameterSetName = 'List')]
+        [ValidateNotNullOrEmpty()]
         [Alias('Host')]
         [string] $RecordHost,
 
+        # A DNS record type filter for list requests.
         [Parameter(ParameterSetName = 'List')]
+        [ValidateNotNullOrEmpty()]
         [string] $Type,
 
+        # A record-data filter for list requests.
         [Parameter(ParameterSetName = 'List')]
+        [ValidateNotNullOrEmpty()]
         [string] $Data,
 
+        # The stored credential context to use instead of the default.
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [string] $Context
     )
 
-    $resolvedContext = Resolve-DomeneshopContext -Context $Context
+    $storedContext = if ($PSBoundParameters.ContainsKey('Context')) {
+        Get-DomeneshopContext -Context $Context
+    } else {
+        Get-DomeneshopContext
+    }
+    $resolvedContext = Resolve-DomeneshopContext -Context $storedContext
     $apiBaseUri = Get-DomeneshopApiBaseUri -Context $resolvedContext
     $uri = "$apiBaseUri/domains/$DomainID/dns"
 
-    if ($PSCmdlet.ParameterSetName -eq 'GetByID') {
+    if ($PSCmdlet.ParameterSetName -eq 'Get by ID') {
         $uri = "$uri/$RecordID"
     } else {
         $queryParts = @()

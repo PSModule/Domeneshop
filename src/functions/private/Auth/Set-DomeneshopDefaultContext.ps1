@@ -1,11 +1,46 @@
+#Requires -Modules @{ ModuleName = 'Context'; ModuleVersion = '8.1.6' }
+
 function Set-DomeneshopDefaultContext {
-    [CmdletBinding()]
+    <#
+        .SYNOPSIS
+        Set the default Domeneshop context name.
+
+        .DESCRIPTION
+        Persist the selected default context name in the Domeneshop configuration entry.
+
+        .EXAMPLE
+        Set-DomeneshopDefaultContext -Context 'production'
+
+        Set production as the default Domeneshop context.
+
+        .INPUTS
+        None
+
+        You can't pipe objects to Set-DomeneshopDefaultContext.
+
+        .OUTPUTS
+        None
+
+        Set-DomeneshopDefaultContext doesn't emit output.
+
+        .NOTES
+        The public caller is responsible for guarding this mutation with ShouldProcess.
+
+        .LINK
+        https://psmodule.io/Context/
+    #>
+    [OutputType([void])]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
     param(
+        # The name of an existing Domeneshop context.
         [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [string] $Context
     )
 
     $config = Get-DomeneshopConfig
     $config.DefaultContext = $Context
-    Set-Context -ID '__Domeneshop.Config' -Vault 'Domeneshop' -Context $config
+    if ($PSCmdlet.ShouldProcess('Domeneshop module configuration', "Set [$Context] as the default context")) {
+        $null = Set-Context -ID '__Domeneshop.Config' -Vault 'Domeneshop' -Context $config
+    }
 }

@@ -40,7 +40,7 @@ Describe 'Domeneshop context and auth flow' {
     }
 
     It 'Get-DomeneshopDomain calls domains endpoint with domain filter' {
-        Mock Resolve-DomeneshopContext {
+        Mock Get-DomeneshopContext {
             [pscustomobject]@{
                 ID         = 'demo'
                 Token      = 'token'
@@ -77,7 +77,7 @@ Describe 'Domeneshop context and auth flow' {
     }
 
     It 'Get-DomeneshopDomain can get a domain by ID' {
-        Mock Resolve-DomeneshopContext {
+        Mock Get-DomeneshopContext {
             [pscustomobject]@{
                 ID         = 'demo'
                 Token      = 'token'
@@ -95,7 +95,7 @@ Describe 'Domeneshop context and auth flow' {
     }
 
     It 'Get-DomeneshopDnsRecord builds list query and endpoint' {
-        Mock Resolve-DomeneshopContext {
+        Mock Get-DomeneshopContext {
             [pscustomobject]@{
                 ID         = 'demo'
                 Token      = 'token'
@@ -114,7 +114,7 @@ Describe 'Domeneshop context and auth flow' {
     }
 
     It 'Get-DomeneshopDnsRecord can get record by ID' {
-        Mock Resolve-DomeneshopContext {
+        Mock Get-DomeneshopContext {
             [pscustomobject]@{
                 ID         = 'demo'
                 Token      = 'token'
@@ -133,7 +133,7 @@ Describe 'Domeneshop context and auth flow' {
     }
 
     It 'DNS mutating commands call expected endpoints' {
-        Mock Resolve-DomeneshopContext {
+        Mock Get-DomeneshopContext {
             [pscustomobject]@{
                 ID         = 'demo'
                 Token      = 'token'
@@ -160,7 +160,7 @@ Describe 'Domeneshop context and auth flow' {
     }
 
     It 'Forward commands call expected endpoints' {
-        Mock Resolve-DomeneshopContext {
+        Mock Get-DomeneshopContext {
             [pscustomobject]@{
                 ID         = 'demo'
                 Token      = 'token'
@@ -195,7 +195,7 @@ Describe 'Domeneshop context and auth flow' {
     }
 
     It 'Get-DomeneshopInvoice supports list and by ID' {
-        Mock Resolve-DomeneshopContext {
+        Mock Get-DomeneshopContext {
             [pscustomobject]@{
                 ID         = 'demo'
                 Token      = 'token'
@@ -217,7 +217,7 @@ Describe 'Domeneshop context and auth flow' {
     }
 
     It 'Update-DomeneshopDdns builds hostname and myip query' {
-        Mock Resolve-DomeneshopContext {
+        Mock Get-DomeneshopContext {
             [pscustomobject]@{
                 ID         = 'demo'
                 Token      = 'token'
