@@ -4,7 +4,7 @@ function Remove-DomeneshopForward {
         Remove an HTTP forward from a Domeneshop domain.
 
         .DESCRIPTION
-        Permanently delete an HTTP forward by its domain identifier and host name.
+        Permanently delete an HTTP forward by its domain identifier and hostname.
 
         .EXAMPLE
         Remove-DomeneshopForward -DomainID 42 -ForwardHost 'www'
@@ -35,7 +35,7 @@ function Remove-DomeneshopForward {
         [ValidateRange(1, [int]::MaxValue)]
         [int] $DomainID,
 
-        # The host name of the HTTP forward to remove.
+        # The hostname of the HTTP forward to remove.
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
         [Alias('Host')]

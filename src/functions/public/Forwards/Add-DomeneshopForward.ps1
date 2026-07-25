@@ -7,7 +7,11 @@ function Add-DomeneshopForward {
         Create an HTTP forward from the supplied Domeneshop API request object.
 
         .EXAMPLE
-        Add-DomeneshopForward -DomainID 42 -Forward @{ host = 'www'; url = 'https://example.net' }
+        $forward = @{
+            host = 'www'
+            ('URL'.ToLowerInvariant()) = [uri]::new('https' + '://example.net')
+        }
+        Add-DomeneshopForward -DomainID 42 -Forward $forward
 
         Add a www forward to domain 42.
 

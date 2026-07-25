@@ -34,7 +34,7 @@ function Update-DomeneshopDdns {
     [OutputType([object])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The fully qualified host name to update.
+        # The fully qualified hostname to update.
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
         [Alias('Host')]

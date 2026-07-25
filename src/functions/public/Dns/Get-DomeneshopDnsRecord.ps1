@@ -45,7 +45,7 @@ function Get-DomeneshopDnsRecord {
         [ValidateRange(1, [int]::MaxValue)]
         [int] $RecordID,
 
-        # A host-name filter for list requests.
+        # A hostname filter for list requests.
         [Parameter(ParameterSetName = 'List')]
         [ValidateNotNullOrEmpty()]
         [Alias('Host')]

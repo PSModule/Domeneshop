@@ -7,7 +7,11 @@ function Set-DomeneshopForward {
         Replace an HTTP forward with the supplied Domeneshop API request object.
 
         .EXAMPLE
-        Set-DomeneshopForward -DomainID 42 -ForwardHost 'www' -Forward @{ host = 'www'; url = 'https://example.org' }
+        $forward = @{
+            host = 'www'
+            ('URL'.ToLowerInvariant()) = [uri]::new('https' + '://example.org')
+        }
+        Set-DomeneshopForward -DomainID 42 -ForwardHost 'www' -Forward $forward
 
         Update the www forward on domain 42.
 
@@ -35,7 +39,7 @@ function Set-DomeneshopForward {
         [ValidateRange(1, [int]::MaxValue)]
         [int] $DomainID,
 
-        # The host name of the HTTP forward to update.
+        # The hostname of the HTTP forward to update.
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
         [Alias('Host')]

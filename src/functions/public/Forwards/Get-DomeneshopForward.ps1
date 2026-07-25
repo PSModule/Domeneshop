@@ -40,7 +40,7 @@ function Get-DomeneshopForward {
         [ValidateRange(1, [int]::MaxValue)]
         [int] $DomainID,
 
-        # The host name of a specific HTTP forward.
+        # The hostname of a specific HTTP forward.
         [Parameter(Mandatory, ParameterSetName = 'Get by host')]
         [ValidateNotNullOrEmpty()]
         [Alias('Host')]
