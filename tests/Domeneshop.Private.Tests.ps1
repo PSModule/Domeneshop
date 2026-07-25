@@ -43,6 +43,11 @@ Describe 'Domeneshop private helpers' {
             Should -Throw '*invalid API base URI*'
     }
 
+    It 'rejects the reserved module configuration name as a default context' {
+        { Set-DomeneshopDefaultContext -Context '__Domeneshop.Config' -Confirm:$false } |
+            Should -Throw '*reserved for Domeneshop module configuration*'
+    }
+
     It 'uses basic authentication and terminating transport errors' {
         Mock Invoke-RestMethod { [pscustomobject]@{ ok = $true } }
 

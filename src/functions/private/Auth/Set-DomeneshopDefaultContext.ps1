@@ -35,6 +35,7 @@ function Set-DomeneshopDefaultContext {
         # The name of an existing Domeneshop context.
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Test-DomeneshopContextName -Context $_ })]
         [string] $Context
     )
 

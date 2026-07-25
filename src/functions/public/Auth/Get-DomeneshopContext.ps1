@@ -40,6 +40,7 @@ function Get-DomeneshopContext {
         # The name of a specific stored context.
         [Parameter(Mandatory, ParameterSetName = 'Get named')]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Test-DomeneshopContextName -Context $_ })]
         [string] $Context,
 
         # List every stored Domeneshop credential context.

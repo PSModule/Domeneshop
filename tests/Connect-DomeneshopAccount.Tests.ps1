@@ -48,4 +48,11 @@ Describe 'Connect-DomeneshopAccount' {
         { Connect-DomeneshopAccount -Token 'token' -Secret 42 -Context 'demo' } |
             Should -Throw '*Secret must be a SecureString or String value*'
     }
+
+    It 'rejects the reserved module configuration context name' {
+        { Connect-DomeneshopAccount -Token 'token' -Secret 'secret' -Context '__Domeneshop.Config' } |
+            Should -Throw '*reserved for Domeneshop module configuration*'
+
+        Should -Invoke Set-Context -Times 0 -Exactly
+    }
 }

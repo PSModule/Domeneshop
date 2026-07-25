@@ -34,6 +34,11 @@ Describe 'Get-DomeneshopContext' {
         { Get-DomeneshopContext } | Should -Throw '*No default Domeneshop context found*'
     }
 
+    It 'rejects an explicit request for the reserved module configuration context' {
+        { Get-DomeneshopContext -Context '__Domeneshop.Config' } |
+            Should -Throw '*reserved for Domeneshop module configuration*'
+    }
+
     It 'excludes the module configuration when listing contexts' {
         Mock Get-Context {
             @(

@@ -6,7 +6,8 @@ function Connect-DomeneshopAccount {
         Stores Domeneshop API credentials in a secure context.
 
         .DESCRIPTION
-        Stores Domeneshop API credentials using the Context module and optionally sets the context as default.
+        Stores Domeneshop API credentials using the Context module. The first stored context becomes the
+        default automatically, and Default replaces an existing default.
 
         .EXAMPLE
         Connect-DomeneshopAccount -Token 'my-token' -Secret (Read-Host -AsSecureString)
@@ -49,9 +50,10 @@ function Connect-DomeneshopAccount {
         # The name used to store and retrieve this credential context.
         [Parameter()]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ Test-DomeneshopContextName -Context $_ })]
         [string] $Context = 'default',
 
-        # Set this context as the default for commands that omit Context.
+        # Replace the default context; the first stored context becomes the default automatically.
         [Parameter()]
         [switch] $Default,
 
