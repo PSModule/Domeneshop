@@ -13,25 +13,31 @@ function Get-DomeneshopDomain {
         Get-DomeneshopDomain -Domain '.no'
     #>
     [OutputType([object[]])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'List')]
     param(
-        [Parameter()]
+        [Parameter(ParameterSetName = 'List')]
         [string] $Domain,
+
+        [Parameter(Mandatory, ParameterSetName = 'GetByID')]
+        [int] $DomainID,
 
         [Parameter()]
         [string] $Context
     )
 
     $resolvedContext = Resolve-DomeneshopContext -Context $Context
-    $apiBaseUri = [string] $resolvedContext.ApiBaseUri
-    if ([string]::IsNullOrEmpty($apiBaseUri)) {
-        $apiBaseUri = 'https://api.domeneshop.no/v0'
-    }
+    $apiBaseUri = Get-DomeneshopApiBaseUri -Context $resolvedContext
 
-    $uri = "$apiBaseUri/domains"
-    if ($Domain) {
-        $encodedDomain = [uri]::EscapeDataString($Domain)
-        $uri = "${uri}?domain=$encodedDomain"
+    $uri = switch ($PSCmdlet.ParameterSetName) {
+        'GetByID' { "$apiBaseUri/domains/$DomainID"; break }
+        default {
+            $listUri = "$apiBaseUri/domains"
+            if ($Domain) {
+                $encodedDomain = [uri]::EscapeDataString($Domain)
+                $listUri = "${listUri}?domain=$encodedDomain"
+            }
+            $listUri
+        }
     }
 
     Invoke-DomeneshopApiRequest -Method Get -Uri $uri -Context $resolvedContext
