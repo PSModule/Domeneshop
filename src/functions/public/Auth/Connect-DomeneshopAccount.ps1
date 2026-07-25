@@ -77,7 +77,11 @@ function Connect-DomeneshopAccount {
 
     if ($PSCmdlet.ShouldProcess("Domeneshop context [$Context]", 'Store API credentials')) {
         if (-not $PSBoundParameters.ContainsKey('Secret')) {
-            Start-Process -FilePath 'https://domene.shop/admin?view=api'
+            try {
+                Start-Process -FilePath 'https://domene.shop/admin?view=api'
+            } catch {
+                Write-Warning "Unable to open the Domeneshop API settings page: $($_.Exception.Message)"
+            }
             $Secret = Read-Host -Prompt 'Enter the Domeneshop API secret' -AsSecureString
             $null = Test-DomeneshopSecret -Secret $Secret
         }

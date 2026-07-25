@@ -64,6 +64,23 @@ Describe 'Connect-DomeneshopAccount' {
         }
     }
 
+    It 'securely prompts and stores credentials when the browser cannot open' {
+        Mock Start-Process { throw 'No browser is available.' }
+        Mock Write-Warning {}
+
+        Connect-DomeneshopAccount -Token 'token' -Context 'demo'
+
+        Should -Invoke Write-Warning -Times 1 -Exactly -ParameterFilter {
+            $Message -eq 'Unable to open the Domeneshop API settings page: No browser is available.'
+        }
+        Should -Invoke Read-Host -Times 1 -Exactly -ParameterFilter {
+            $Prompt -eq 'Enter the Domeneshop API secret' -and $AsSecureString
+        }
+        Should -Invoke Set-Context -Times 1 -Exactly -ParameterFilter {
+            [object]::ReferenceEquals($Context.Secret, $script:PromptedSecret)
+        }
+    }
+
     It 'does not open API settings or prompt when WhatIf omits Secret' {
         Connect-DomeneshopAccount -Token 'token' -Context 'demo' -WhatIf
 
