@@ -21,6 +21,10 @@ Describe 'Connect-DomeneshopAccount' {
         Mock Get-DomeneshopConfig { [pscustomobject]@{ DefaultContext = $null } }
         Mock Set-DomeneshopDefaultContext {}
         Mock Get-DomeneshopContext { [pscustomobject]@{ ID = 'demo' } }
+        Mock Start-Process {}
+        Mock Read-Host { $script:PromptedSecret }
+        $script:PromptedSecret = [securestring]::new()
+        'prompted-secret'.ToCharArray() | ForEach-Object { $script:PromptedSecret.AppendChar($_) }
     }
 
     It 'stores credentials securely and sets the first context as default' {
@@ -42,6 +46,40 @@ Describe 'Connect-DomeneshopAccount' {
 
         Should -Invoke Set-Context -Times 0 -Exactly
         Should -Invoke Set-DomeneshopDefaultContext -Times 0 -Exactly
+    }
+
+    It 'opens API settings and securely prompts when Secret is omitted' {
+        Connect-DomeneshopAccount -Token 'token' -Context 'demo'
+
+        Should -Invoke Start-Process -Times 1 -Exactly -ParameterFilter {
+            $FilePath -eq 'https://domene.shop/admin?view=api'
+        }
+        Should -Invoke Read-Host -Times 1 -Exactly -ParameterFilter {
+            $Prompt -eq 'Enter the Domeneshop API secret' -and $AsSecureString
+        }
+        Should -Invoke Set-Context -Times 1 -Exactly -ParameterFilter {
+            $ID -eq 'demo' -and
+            $Vault -eq 'Domeneshop' -and
+            [object]::ReferenceEquals($Context.Secret, $script:PromptedSecret)
+        }
+    }
+
+    It 'does not open API settings or prompt when WhatIf omits Secret' {
+        Connect-DomeneshopAccount -Token 'token' -Context 'demo' -WhatIf
+
+        Should -Invoke Start-Process -Times 0 -Exactly
+        Should -Invoke Read-Host -Times 0 -Exactly
+        Should -Invoke Set-Context -Times 0 -Exactly
+    }
+
+    It 'accepts Key as an alias for an explicit secure secret' {
+        Connect-DomeneshopAccount -Token 'token' -Key $script:PromptedSecret -Context 'demo'
+
+        Should -Invoke Start-Process -Times 0 -Exactly
+        Should -Invoke Read-Host -Times 0 -Exactly
+        Should -Invoke Set-Context -Times 1 -Exactly -ParameterFilter {
+            [object]::ReferenceEquals($Context.Secret, $script:PromptedSecret)
+        }
     }
 
     It 'rejects unsupported secret types' {

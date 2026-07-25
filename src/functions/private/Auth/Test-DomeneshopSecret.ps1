@@ -4,7 +4,7 @@ function Test-DomeneshopSecret {
         Validate a Domeneshop API secret.
 
         .DESCRIPTION
-        Reject empty string and secure string values before credential storage.
+        Reject unsupported and empty values before credential storage.
 
         .EXAMPLE
         Test-DomeneshopSecret -Secret $secret
@@ -19,10 +19,10 @@ function Test-DomeneshopSecret {
         .OUTPUTS
         System.Boolean
 
-        True when the secret is not empty.
+        True when the secret has a supported type and is not empty.
 
         .NOTES
-        Secret type validation remains the responsibility of the calling command.
+        Supported values are String and SecureString.
     #>
     [OutputType([bool])]
     [CmdletBinding()]
@@ -32,6 +32,10 @@ function Test-DomeneshopSecret {
         [ValidateNotNull()]
         [object] $Secret
     )
+
+    if ($Secret -isnot [string] -and $Secret -isnot [securestring]) {
+        throw 'Secret must be a SecureString or String value.'
+    }
 
     if (
         ($Secret -is [string] -and [string]::IsNullOrWhiteSpace($Secret)) -or
