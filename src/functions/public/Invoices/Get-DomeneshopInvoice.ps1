@@ -30,7 +30,7 @@ function Get-DomeneshopInvoice {
         Uses the default context when Context is omitted.
 
         .LINK
-        https://psmodule.io/Domeneshop/Functions/Invoices/Get-DomeneshopInvoice/
+        https://psmodule.io/Domeneshop/Functions/Invoices/Get-DomeneshopInvoice
 
         .LINK
         https://api.domeneshop.no/docs/

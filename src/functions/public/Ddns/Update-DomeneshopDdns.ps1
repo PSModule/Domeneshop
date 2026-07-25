@@ -25,7 +25,7 @@ function Update-DomeneshopDdns {
         Uses the caller's public IP address when MyIP is omitted.
 
         .LINK
-        https://psmodule.io/Domeneshop/Functions/Ddns/Update-DomeneshopDdns/
+        https://psmodule.io/Domeneshop/Functions/Ddns/Update-DomeneshopDdns
 
         .LINK
         https://api.domeneshop.no/docs/
