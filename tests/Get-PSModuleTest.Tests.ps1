@@ -13,7 +13,7 @@ param()
 
 Describe 'Get-PSModuleTest' {
     BeforeAll {
-        . "$PSScriptRoot\Domeneshop.TestSetup.ps1"
+        . (Join-Path -Path $PSScriptRoot -ChildPath 'Domeneshop.TestSetup.ps1')
     }
 
     It 'returns a greeting for the supplied name' {

@@ -5,7 +5,9 @@
 [CmdletBinding()]
 param()
 
-$functionFiles = Get-ChildItem -Path "$PSScriptRoot\..\src\functions" -Filter '*.ps1' -Recurse -File |
+$sourcePath = Join-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -ChildPath 'src'
+$functionsPath = Join-Path -Path $sourcePath -ChildPath 'functions'
+$functionFiles = Get-ChildItem -Path $functionsPath -Filter '*.ps1' -Recurse -File |
     Sort-Object -Property FullName
 foreach ($file in $functionFiles) {
     . $file.FullName

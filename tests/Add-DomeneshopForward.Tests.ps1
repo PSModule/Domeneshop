@@ -13,7 +13,7 @@ param()
 
 Describe 'Add-DomeneshopForward' {
     BeforeAll {
-        . "$PSScriptRoot\Domeneshop.TestSetup.ps1"
+        . (Join-Path -Path $PSScriptRoot -ChildPath 'Domeneshop.TestSetup.ps1')
     }
 
     BeforeEach {
