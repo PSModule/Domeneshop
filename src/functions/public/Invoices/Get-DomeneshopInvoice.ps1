@@ -5,21 +5,56 @@ function Get-DomeneshopInvoice {
 
         .DESCRIPTION
         Lists invoices, or gets a specific invoice by invoice number.
+
+        .EXAMPLE
+        Get-DomeneshopInvoice
+
+        List all Domeneshop invoices.
+
+        .EXAMPLE
+        Get-DomeneshopInvoice -InvoiceID 1001
+
+        Get invoice 1001.
+
+        .INPUTS
+        None
+
+        You can't pipe objects to Get-DomeneshopInvoice.
+
+        .OUTPUTS
+        System.Object[]
+
+        The matching Domeneshop invoices.
+
+        .NOTES
+        Uses the default context when Context is omitted.
+
+        .LINK
+        https://api.domeneshop.no/docs/
     #>
     [OutputType([object[]])]
     [CmdletBinding(DefaultParameterSetName = 'List')]
     param(
-        [Parameter(Mandatory, ParameterSetName = 'GetByID')]
+        # The numeric identifier of a specific invoice.
+        [Parameter(Mandatory, ParameterSetName = 'Get by ID')]
+        [ValidateRange(1, [int]::MaxValue)]
         [Alias('InvoiceNo')]
         [int] $InvoiceID,
 
+        # The stored credential context to use instead of the default.
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [string] $Context
     )
 
-    $resolvedContext = Resolve-DomeneshopContext -Context $Context
+    $storedContext = if ($PSBoundParameters.ContainsKey('Context')) {
+        Get-DomeneshopContext -Context $Context
+    } else {
+        Get-DomeneshopContext
+    }
+    $resolvedContext = Resolve-DomeneshopContext -Context $storedContext
     $apiBaseUri = Get-DomeneshopApiBaseUri -Context $resolvedContext
-    $uri = if ($PSCmdlet.ParameterSetName -eq 'GetByID') {
+    $uri = if ($PSCmdlet.ParameterSetName -eq 'Get by ID') {
         "$apiBaseUri/invoices/$InvoiceID"
     } else {
         "$apiBaseUri/invoices"

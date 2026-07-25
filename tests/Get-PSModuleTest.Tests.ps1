@@ -11,7 +11,7 @@
 [CmdletBinding()]
 param()
 
-Describe 'Module' {
+Describe 'Get-PSModuleTest' {
     BeforeAll {
         $functionFiles = Get-ChildItem -Path "$PSScriptRoot\..\src\functions" -Filter '*.ps1' -Recurse -File | Sort-Object -Property FullName
         foreach ($file in $functionFiles) {
@@ -19,7 +19,7 @@ Describe 'Module' {
         }
     }
 
-    It 'Function: Get-PSModuleTest' {
+    It 'returns a greeting for the supplied name' {
         Get-PSModuleTest -Name 'World' | Should -Be 'Hello, World!'
     }
 }

@@ -1,3 +1,5 @@
+#Requires -Modules @{ ModuleName = 'Context'; ModuleVersion = '8.1.6' }
+
 function Connect-DomeneshopAccount {
     <#
         .SYNOPSIS
@@ -8,22 +10,52 @@ function Connect-DomeneshopAccount {
 
         .EXAMPLE
         Connect-DomeneshopAccount -Token 'my-token' -Secret (Read-Host -AsSecureString)
+
+        Store credentials in the default named context.
+
+        .INPUTS
+        None
+
+        You can't pipe objects to Connect-DomeneshopAccount.
+
+        .OUTPUTS
+        System.Object
+
+        The stored context when PassThru is specified.
+
+        .NOTES
+        Credentials are encrypted by the Context module.
+
+        .LINK
+        https://api.domeneshop.no/docs/
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSAvoidUsingConvertToSecureStringWithPlainText', '',
+        Justification = 'String secrets remain supported for compatibility and are converted before storage.'
+    )]
     [OutputType([object])]
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
+        # The Domeneshop API token used as the Basic authentication username.
         [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [string] $Token,
 
+        # The Domeneshop API secret as a string or secure string.
         [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [object] $Secret,
 
+        # The name used to store and retrieve this credential context.
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [string] $Context = 'default',
 
+        # Set this context as the default for commands that omit Context.
         [Parameter()]
         [switch] $Default,
 
+        # Emit the stored context after it is saved.
         [Parameter()]
         [switch] $PassThru
     )
@@ -43,14 +75,16 @@ function Connect-DomeneshopAccount {
         ConnectedAt = Get-Date
     }
 
-    Set-Context -ID $Context -Vault 'Domeneshop' -Context $contextObject
+    if ($PSCmdlet.ShouldProcess("Domeneshop context [$Context]", 'Store API credentials')) {
+        $null = Set-Context -ID $Context -Vault 'Domeneshop' -Context $contextObject
 
-    $config = Get-DomeneshopConfig
-    if ($Default -or [string]::IsNullOrEmpty($config.DefaultContext)) {
-        Set-DomeneshopDefaultContext -Context $Context
-    }
+        $config = Get-DomeneshopConfig
+        if ($Default -or [string]::IsNullOrWhiteSpace([string] $config.DefaultContext)) {
+            Set-DomeneshopDefaultContext -Context $Context
+        }
 
-    if ($PassThru) {
-        Get-DomeneshopContext -Context $Context
+        if ($PassThru) {
+            Get-DomeneshopContext -Context $Context
+        }
     }
 }
