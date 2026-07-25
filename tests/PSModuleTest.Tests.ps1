@@ -12,6 +12,13 @@
 param()
 
 Describe 'Module' {
+    BeforeAll {
+        $functionFiles = Get-ChildItem -Path "$PSScriptRoot\..\src\functions" -Filter '*.ps1' -Recurse -File | Sort-Object -Property FullName
+        foreach ($file in $functionFiles) {
+            . $file.FullName
+        }
+    }
+
     It 'Function: Get-PSModuleTest' {
         Get-PSModuleTest -Name 'World' | Should -Be 'Hello, World!'
     }
