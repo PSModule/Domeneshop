@@ -39,6 +39,21 @@ Describe 'Get-DomeneshopContext' {
             Should -Throw '*reserved for Domeneshop module configuration*'
     }
 
+    It 'throws when the configured default context is missing from the vault' {
+        Mock Get-DomeneshopConfig { [pscustomobject]@{ DefaultContext = 'missing' } }
+        Mock Get-Context {}
+
+        { Get-DomeneshopContext } |
+            Should -Throw '*Domeneshop context*missing*was not found in the Domeneshop vault*'
+    }
+
+    It 'throws when an explicitly requested context is missing from the vault' {
+        Mock Get-Context {}
+
+        { Get-DomeneshopContext -Context 'missing' } |
+            Should -Throw '*Domeneshop context*missing*was not found in the Domeneshop vault*'
+    }
+
     It 'excludes the module configuration when listing contexts' {
         Mock Get-Context {
             @(

@@ -63,5 +63,13 @@ function Get-DomeneshopContext {
         $id = $config.DefaultContext
     }
 
-    Get-Context -ID $id -Vault 'Domeneshop' | Where-Object { $_.ID -ne '__Domeneshop.Config' } | Sort-Object -Property ID
+    $contexts = @(
+        Get-Context -ID $id -Vault 'Domeneshop' |
+            Where-Object { $_.ID -ne '__Domeneshop.Config' }
+    )
+    if (-not $ListAvailable -and $contexts.Count -eq 0) {
+        throw "Domeneshop context [$id] was not found in the Domeneshop vault."
+    }
+
+    $contexts | Sort-Object -Property ID
 }

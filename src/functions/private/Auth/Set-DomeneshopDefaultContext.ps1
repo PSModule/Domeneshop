@@ -40,8 +40,8 @@ function Set-DomeneshopDefaultContext {
     )
 
     $config = Get-DomeneshopConfig
-    $config.DefaultContext = $Context
     if ($PSCmdlet.ShouldProcess('Domeneshop module configuration', "Set [$Context] as the default context")) {
+        $config.DefaultContext = $Context
         $null = Set-Context -ID '__Domeneshop.Config' -Vault 'Domeneshop' -Context $config
     }
 }

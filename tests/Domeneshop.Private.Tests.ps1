@@ -48,6 +48,17 @@ Describe 'Domeneshop private helpers' {
             Should -Throw '*reserved for Domeneshop module configuration*'
     }
 
+    It 'does not mutate the configuration when setting the default with WhatIf' {
+        $config = [pscustomobject]@{ DefaultContext = 'original' }
+        Mock Get-DomeneshopConfig { $config }
+        Mock Set-Context {}
+
+        Set-DomeneshopDefaultContext -Context 'replacement' -WhatIf
+
+        $config.DefaultContext | Should -Be 'original'
+        Should -Invoke Set-Context -Times 0 -Exactly
+    }
+
     It 'uses basic authentication and terminating transport errors' {
         Mock Invoke-RestMethod { [pscustomobject]@{ ok = $true } }
 
