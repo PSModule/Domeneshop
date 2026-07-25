@@ -1,3 +1,4 @@
+#Requires -Version 7.6
 #Requires -Modules @{ ModuleName = 'Context'; ModuleVersion = '8.1.6' }
 
 function Connect-DomeneshopAccount {
