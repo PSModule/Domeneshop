@@ -49,6 +49,15 @@ Describe 'Connect-DomeneshopAccount' {
             Should -Throw '*Secret must be a SecureString or String value*'
     }
 
+    It 'rejects empty string and secure string secrets' {
+        { Connect-DomeneshopAccount -Token 'token' -Secret ' ' -Context 'demo' } |
+            Should -Throw '*Secret cannot be empty or whitespace*'
+        { Connect-DomeneshopAccount -Token 'token' -Secret ([securestring]::new()) -Context 'demo' } |
+            Should -Throw '*Secret cannot be empty or whitespace*'
+
+        Should -Invoke Set-Context -Times 0 -Exactly
+    }
+
     It 'rejects the reserved module configuration context name' {
         { Connect-DomeneshopAccount -Token 'token' -Secret 'secret' -Context '__Domeneshop.Config' } |
             Should -Throw '*reserved for Domeneshop module configuration*'

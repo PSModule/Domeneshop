@@ -45,6 +45,7 @@ function Connect-DomeneshopAccount {
         # The Domeneshop API secret as a string or secure string.
         [Parameter(Mandatory)]
         [ValidateNotNull()]
+        [ValidateScript({ Test-DomeneshopSecret -Secret $_ })]
         [object] $Secret,
 
         # The name used to store and retrieve this credential context.
