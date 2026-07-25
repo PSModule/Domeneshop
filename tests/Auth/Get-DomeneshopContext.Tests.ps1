@@ -13,7 +13,7 @@ param()
 
 Describe 'Get-DomeneshopContext' {
     BeforeAll {
-        . (Join-Path -Path $PSScriptRoot -ChildPath 'Domeneshop.TestSetup.ps1')
+        . (Join-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -ChildPath 'Domeneshop.TestSetup.ps1')
     }
 
     It 'gets the configured default context' {

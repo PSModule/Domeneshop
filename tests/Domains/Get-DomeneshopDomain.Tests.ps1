@@ -11,9 +11,9 @@
 [CmdletBinding()]
 param()
 
-Describe 'Get-DomeneshopDnsRecord' {
+Describe 'Get-DomeneshopDomain' {
     BeforeAll {
-        . (Join-Path -Path $PSScriptRoot -ChildPath 'Domeneshop.TestSetup.ps1')
+        . (Join-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -ChildPath 'Domeneshop.TestSetup.ps1')
     }
 
     BeforeEach {
@@ -21,28 +21,30 @@ Describe 'Get-DomeneshopDnsRecord' {
         Mock Invoke-DomeneshopApiRequest {}
     }
 
-    It 'builds an escaped list query' {
-        Get-DomeneshopDnsRecord -Context 'demo' -DomainID 42 -RecordHost 'home office' -Type 'A' -Data '192.0.2.10'
+    It 'adds an escaped domain filter to list requests' {
+        Get-DomeneshopDomain -Context 'demo' -Domain 'example & test'
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
             $Method -eq 'Get' -and
-            $Uri -eq 'https://api.domeneshop.no/v0/domains/42/dns?host=home%20office&type=A&data=192.0.2.10'
+            $Uri -eq 'https://api.domeneshop.no/v0/domains?domain=example%20%26%20test' -and
+            $Context.ID -eq 'demo'
         }
     }
 
-    It 'gets a DNS record by ID' {
-        Get-DomeneshopDnsRecord -Context 'demo' -DomainID 42 -RecordID 7
+    It 'gets a domain by ID' {
+        Get-DomeneshopDomain -Context 'demo' -DomainID 42
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
-            $Method -eq 'Get' -and
-            $Uri -eq 'https://api.domeneshop.no/v0/domains/42/dns/7'
+            $Method -eq 'Get' -and $Uri -eq 'https://api.domeneshop.no/v0/domains/42'
         }
     }
 
-    It 'rejects whitespace-only list filters' {
-        { Get-DomeneshopDnsRecord -Context 'demo' -DomainID 42 -RecordHost ' ' } | Should -Throw
-        { Get-DomeneshopDnsRecord -Context 'demo' -DomainID 42 -Type ' ' } | Should -Throw
-        { Get-DomeneshopDnsRecord -Context 'demo' -DomainID 42 -Data ' ' } | Should -Throw
+    It 'rejects non-positive domain IDs' {
+        { Get-DomeneshopDomain -Context 'demo' -DomainID 0 } | Should -Throw
+    }
+
+    It 'rejects whitespace-only domain filters' {
+        { Get-DomeneshopDomain -Context 'demo' -Domain ' ' } | Should -Throw
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
     }

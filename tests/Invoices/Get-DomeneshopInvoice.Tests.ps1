@@ -11,9 +11,9 @@
 [CmdletBinding()]
 param()
 
-Describe 'Get-DomeneshopForward' {
+Describe 'Get-DomeneshopInvoice' {
     BeforeAll {
-        . (Join-Path -Path $PSScriptRoot -ChildPath 'Domeneshop.TestSetup.ps1')
+        . (Join-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -ChildPath 'Domeneshop.TestSetup.ps1')
     }
 
     BeforeEach {
@@ -21,27 +21,19 @@ Describe 'Get-DomeneshopForward' {
         Mock Invoke-DomeneshopApiRequest {}
     }
 
-    It 'lists forwards for a domain' {
-        Get-DomeneshopForward -Context 'demo' -DomainID 42
+    It 'lists invoices' {
+        Get-DomeneshopInvoice -Context 'demo'
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
-            $Method -eq 'Get' -and
-            $Uri -eq 'https://api.domeneshop.no/v0/domains/42/forwards/'
+            $Method -eq 'Get' -and $Uri -eq 'https://api.domeneshop.no/v0/invoices'
         }
     }
 
-    It 'gets a forward by escaped host name' {
-        Get-DomeneshopForward -Context 'demo' -DomainID 42 -ForwardHost 'home office'
+    It 'gets an invoice by ID' {
+        Get-DomeneshopInvoice -Context 'demo' -InvoiceID 1001
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
-            $Method -eq 'Get' -and
-            $Uri -eq 'https://api.domeneshop.no/v0/domains/42/forwards/home%20office'
+            $Method -eq 'Get' -and $Uri -eq 'https://api.domeneshop.no/v0/invoices/1001'
         }
-    }
-
-    It 'rejects whitespace-only forward hosts' {
-        { Get-DomeneshopForward -Context 'demo' -DomainID 42 -ForwardHost ' ' } | Should -Throw
-
-        Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
     }
 }

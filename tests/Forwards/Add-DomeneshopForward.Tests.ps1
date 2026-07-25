@@ -11,34 +11,29 @@
 [CmdletBinding()]
 param()
 
-Describe 'Update-DomeneshopDdns' {
+Describe 'Add-DomeneshopForward' {
     BeforeAll {
-        . (Join-Path -Path $PSScriptRoot -ChildPath 'Domeneshop.TestSetup.ps1')
+        . (Join-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -ChildPath 'Domeneshop.TestSetup.ps1')
     }
 
     BeforeEach {
         Mock Get-DomeneshopContext { $script:DomeneshopTestContext }
         Mock Invoke-DomeneshopApiRequest {}
+        $script:Forward = @{ host = 'www'; url = 'https://example.net' }
     }
 
-    It 'builds an escaped hostname and IP query' {
-        Update-DomeneshopDdns -Context 'demo' -Hostname 'home example.com' -MyIP '192.0.2.10'
+    It 'posts the forward to the domain endpoint' {
+        Add-DomeneshopForward -Context 'demo' -DomainID 42 -Forward $script:Forward
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
-            $Method -eq 'Get' -and
-            $Uri -eq 'https://api.domeneshop.no/v0/dyndns/update?hostname=home%20example.com&myip=192.0.2.10'
+            $Method -eq 'Post' -and
+            $Uri -eq 'https://api.domeneshop.no/v0/domains/42/forwards/' -and
+            $Body -eq $script:Forward
         }
     }
 
     It 'does not send a request when WhatIf is specified' {
-        Update-DomeneshopDdns -Context 'demo' -Hostname 'home.example.com' -WhatIf
-
-        Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
-    }
-
-    It 'rejects whitespace-only hostnames and IP addresses' {
-        { Update-DomeneshopDdns -Context 'demo' -Hostname ' ' } | Should -Throw
-        { Update-DomeneshopDdns -Context 'demo' -Hostname 'home.example.com' -MyIP ' ' } | Should -Throw
+        Add-DomeneshopForward -Context 'demo' -DomainID 42 -Forward $script:Forward -WhatIf
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
     }

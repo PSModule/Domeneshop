@@ -11,9 +11,9 @@
 [CmdletBinding()]
 param()
 
-Describe 'Get-DomeneshopDomain' {
+Describe 'Get-DomeneshopForward' {
     BeforeAll {
-        . (Join-Path -Path $PSScriptRoot -ChildPath 'Domeneshop.TestSetup.ps1')
+        . (Join-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -ChildPath 'Domeneshop.TestSetup.ps1')
     }
 
     BeforeEach {
@@ -21,30 +21,26 @@ Describe 'Get-DomeneshopDomain' {
         Mock Invoke-DomeneshopApiRequest {}
     }
 
-    It 'adds an escaped domain filter to list requests' {
-        Get-DomeneshopDomain -Context 'demo' -Domain 'example & test'
+    It 'lists forwards for a domain' {
+        Get-DomeneshopForward -Context 'demo' -DomainID 42
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
             $Method -eq 'Get' -and
-            $Uri -eq 'https://api.domeneshop.no/v0/domains?domain=example%20%26%20test' -and
-            $Context.ID -eq 'demo'
+            $Uri -eq 'https://api.domeneshop.no/v0/domains/42/forwards/'
         }
     }
 
-    It 'gets a domain by ID' {
-        Get-DomeneshopDomain -Context 'demo' -DomainID 42
+    It 'gets a forward by escaped host name' {
+        Get-DomeneshopForward -Context 'demo' -DomainID 42 -ForwardHost 'home office'
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
-            $Method -eq 'Get' -and $Uri -eq 'https://api.domeneshop.no/v0/domains/42'
+            $Method -eq 'Get' -and
+            $Uri -eq 'https://api.domeneshop.no/v0/domains/42/forwards/home%20office'
         }
     }
 
-    It 'rejects non-positive domain IDs' {
-        { Get-DomeneshopDomain -Context 'demo' -DomainID 0 } | Should -Throw
-    }
-
-    It 'rejects whitespace-only domain filters' {
-        { Get-DomeneshopDomain -Context 'demo' -Domain ' ' } | Should -Throw
+    It 'rejects whitespace-only forward hosts' {
+        { Get-DomeneshopForward -Context 'demo' -DomainID 42 -ForwardHost ' ' } | Should -Throw
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
     }

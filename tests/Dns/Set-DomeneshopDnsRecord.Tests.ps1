@@ -11,27 +11,29 @@
 [CmdletBinding()]
 param()
 
-Describe 'Remove-DomeneshopDnsRecord' {
+Describe 'Set-DomeneshopDnsRecord' {
     BeforeAll {
-        . (Join-Path -Path $PSScriptRoot -ChildPath 'Domeneshop.TestSetup.ps1')
+        . (Join-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -ChildPath 'Domeneshop.TestSetup.ps1')
     }
 
     BeforeEach {
         Mock Get-DomeneshopContext { $script:DomeneshopTestContext }
         Mock Invoke-DomeneshopApiRequest {}
+        $script:Record = @{ host = 'www'; type = 'A'; data = '192.0.2.20' }
     }
 
-    It 'deletes the DNS record endpoint' {
-        Remove-DomeneshopDnsRecord -Context 'demo' -DomainID 42 -RecordID 7 -Confirm:$false
+    It 'puts the replacement record to the record endpoint' {
+        Set-DomeneshopDnsRecord -Context 'demo' -DomainID 42 -RecordID 7 -Record $script:Record
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
-            $Method -eq 'Delete' -and
-            $Uri -eq 'https://api.domeneshop.no/v0/domains/42/dns/7'
+            $Method -eq 'Put' -and
+            $Uri -eq 'https://api.domeneshop.no/v0/domains/42/dns/7' -and
+            $Body -eq $script:Record
         }
     }
 
     It 'does not send a request when WhatIf is specified' {
-        Remove-DomeneshopDnsRecord -Context 'demo' -DomainID 42 -RecordID 7 -WhatIf
+        Set-DomeneshopDnsRecord -Context 'demo' -DomainID 42 -RecordID 7 -Record $script:Record -WhatIf
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
     }
