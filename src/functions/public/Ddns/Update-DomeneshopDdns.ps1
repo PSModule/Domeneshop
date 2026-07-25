@@ -40,12 +40,14 @@ function Update-DomeneshopDdns {
         # The fully qualified hostname to update.
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ -not [string]::IsNullOrWhiteSpace($_) })]
         [Alias('Host')]
         [string] $Hostname,
 
         # The IPv4 or IPv6 address to publish.
         [Parameter()]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ -not [string]::IsNullOrWhiteSpace($_) })]
         [Alias('IP')]
         [string] $MyIP,
 

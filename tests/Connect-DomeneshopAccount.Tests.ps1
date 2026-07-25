@@ -109,4 +109,10 @@ Describe 'Connect-DomeneshopAccount' {
 
         Should -Invoke Set-Context -Times 0 -Exactly
     }
+
+    It 'rejects a whitespace-only API token' {
+        { Connect-DomeneshopAccount -Token ' ' -Secret 'secret' -Context 'demo' } | Should -Throw
+
+        Should -Invoke Set-Context -Times 0 -Exactly
+    }
 }

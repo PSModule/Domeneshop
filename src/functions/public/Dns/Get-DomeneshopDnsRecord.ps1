@@ -51,17 +51,20 @@ function Get-DomeneshopDnsRecord {
         # A hostname filter for list requests.
         [Parameter(ParameterSetName = 'List')]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ -not [string]::IsNullOrWhiteSpace($_) })]
         [Alias('Host')]
         [string] $RecordHost,
 
         # A DNS record type filter for list requests.
         [Parameter(ParameterSetName = 'List')]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ -not [string]::IsNullOrWhiteSpace($_) })]
         [string] $Type,
 
         # A record-data filter for list requests.
         [Parameter(ParameterSetName = 'List')]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ -not [string]::IsNullOrWhiteSpace($_) })]
         [string] $Data,
 
         # The stored credential context to use instead of the default.

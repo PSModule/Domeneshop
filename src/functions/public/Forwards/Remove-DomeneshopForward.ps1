@@ -41,6 +41,7 @@ function Remove-DomeneshopForward {
         # The hostname of the HTTP forward to remove.
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ -not [string]::IsNullOrWhiteSpace($_) })]
         [Alias('Host')]
         [string] $ForwardHost,
 

@@ -38,4 +38,12 @@ Describe 'Get-DomeneshopDnsRecord' {
             $Uri -eq 'https://api.domeneshop.no/v0/domains/42/dns/7'
         }
     }
+
+    It 'rejects whitespace-only list filters' {
+        { Get-DomeneshopDnsRecord -Context 'demo' -DomainID 42 -RecordHost ' ' } | Should -Throw
+        { Get-DomeneshopDnsRecord -Context 'demo' -DomainID 42 -Type ' ' } | Should -Throw
+        { Get-DomeneshopDnsRecord -Context 'demo' -DomainID 42 -Data ' ' } | Should -Throw
+
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
+    }
 }

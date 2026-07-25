@@ -35,4 +35,11 @@ Describe 'Update-DomeneshopDdns' {
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
     }
+
+    It 'rejects whitespace-only hostnames and IP addresses' {
+        { Update-DomeneshopDdns -Context 'demo' -Hostname ' ' } | Should -Throw
+        { Update-DomeneshopDdns -Context 'demo' -Hostname 'home.example.com' -MyIP ' ' } | Should -Throw
+
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
+    }
 }

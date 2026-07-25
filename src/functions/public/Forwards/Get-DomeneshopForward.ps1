@@ -46,6 +46,7 @@ function Get-DomeneshopForward {
         # The hostname of a specific HTTP forward.
         [Parameter(Mandatory, ParameterSetName = 'Get by host')]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ -not [string]::IsNullOrWhiteSpace($_) })]
         [Alias('Host')]
         [string] $ForwardHost,
 

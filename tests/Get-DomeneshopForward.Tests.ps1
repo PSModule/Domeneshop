@@ -38,4 +38,10 @@ Describe 'Get-DomeneshopForward' {
             $Uri -eq 'https://api.domeneshop.no/v0/domains/42/forwards/home%20office'
         }
     }
+
+    It 'rejects whitespace-only forward hosts' {
+        { Get-DomeneshopForward -Context 'demo' -DomainID 42 -ForwardHost ' ' } | Should -Throw
+
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
+    }
 }

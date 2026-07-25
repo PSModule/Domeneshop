@@ -49,6 +49,7 @@ function Connect-DomeneshopAccount {
         # The Domeneshop API token used as the Basic authentication username.
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ -not [string]::IsNullOrWhiteSpace($_) })]
         [string] $Token,
 
         # The Domeneshop API secret as a string or secure string.

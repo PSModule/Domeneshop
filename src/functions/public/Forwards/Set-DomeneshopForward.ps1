@@ -45,6 +45,7 @@ function Set-DomeneshopForward {
         # The hostname of the HTTP forward to update.
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ -not [string]::IsNullOrWhiteSpace($_) })]
         [Alias('Host')]
         [string] $ForwardHost,
 

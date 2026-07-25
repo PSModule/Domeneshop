@@ -36,6 +36,7 @@
         # The name to include in the greeting.
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ -not [string]::IsNullOrWhiteSpace($_) })]
         [string] $Name
     )
 

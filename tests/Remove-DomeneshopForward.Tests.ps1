@@ -35,4 +35,10 @@ Describe 'Remove-DomeneshopForward' {
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
     }
+
+    It 'rejects whitespace-only forward hosts' {
+        { Remove-DomeneshopForward -Context 'demo' -DomainID 42 -ForwardHost ' ' -Confirm:$false } | Should -Throw
+
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
+    }
 }

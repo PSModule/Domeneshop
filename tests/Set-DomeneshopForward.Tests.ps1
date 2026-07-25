@@ -37,4 +37,12 @@ Describe 'Set-DomeneshopForward' {
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
     }
+
+    It 'rejects whitespace-only forward hosts' {
+        {
+            Set-DomeneshopForward -Context 'demo' -DomainID 42 -ForwardHost ' ' -Forward $script:Forward
+        } | Should -Throw
+
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
+    }
 }

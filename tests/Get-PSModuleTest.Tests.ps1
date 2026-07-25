@@ -19,4 +19,8 @@ Describe 'Get-PSModuleTest' {
     It 'returns a greeting for the supplied name' {
         Get-PSModuleTest -Name 'World' | Should -Be 'Hello, World!'
     }
+
+    It 'rejects a whitespace-only name' {
+        { Get-PSModuleTest -Name ' ' } | Should -Throw
+    }
 }
