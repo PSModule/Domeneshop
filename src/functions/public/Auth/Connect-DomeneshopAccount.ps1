@@ -80,7 +80,7 @@ function Connect-DomeneshopAccount {
 
         $config = Get-DomeneshopConfig
         if ($Default -or [string]::IsNullOrWhiteSpace([string] $config.DefaultContext)) {
-            Set-DomeneshopDefaultContext -Context $Context
+            Set-DomeneshopDefaultContext -Context $Context -Confirm:$false
         }
 
         if ($PassThru) {

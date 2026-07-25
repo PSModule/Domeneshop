@@ -24,7 +24,7 @@ function Set-DomeneshopDefaultContext {
         Set-DomeneshopDefaultContext doesn't emit output.
 
         .NOTES
-        The public caller is responsible for guarding this mutation with ShouldProcess.
+        Supports WhatIf and Confirm before changing the module configuration.
 
         .LINK
         https://psmodule.io/Context/

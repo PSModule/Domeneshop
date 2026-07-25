@@ -33,7 +33,7 @@ Describe 'Connect-DomeneshopAccount' {
             $Context.Secret -is [securestring]
         }
         Should -Invoke Set-DomeneshopDefaultContext -Times 1 -Exactly -ParameterFilter {
-            $Context -eq 'demo'
+            $Context -eq 'demo' -and $Confirm -eq $false
         }
     }
 
