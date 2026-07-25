@@ -13,10 +13,7 @@ param()
 
 Describe 'Get-PSModuleTest' {
     BeforeAll {
-        $functionFiles = Get-ChildItem -Path "$PSScriptRoot\..\src\functions" -Filter '*.ps1' -Recurse -File | Sort-Object -Property FullName
-        foreach ($file in $functionFiles) {
-            . $file.FullName
-        }
+        . "$PSScriptRoot\Domeneshop.TestSetup.ps1"
     }
 
     It 'returns a greeting for the supplied name' {

@@ -55,7 +55,7 @@ function Remove-DomeneshopDnsRecord {
     $apiBaseUri = Get-DomeneshopApiBaseUri -Context $resolvedContext
     $uri = "$apiBaseUri/domains/$DomainID/dns/$RecordID"
 
-    if ($PSCmdlet.ShouldProcess("Domain $DomainID DNS record $RecordID", 'Remove')) {
+    if ($PSCmdlet.ShouldProcess("Domain [$DomainID] DNS record [$RecordID]", 'Remove')) {
         Invoke-DomeneshopApiRequest -Method Delete -Uri $uri -Context $resolvedContext
     }
 }

@@ -57,7 +57,7 @@ function Remove-DomeneshopForward {
     $encodedHost = [uri]::EscapeDataString($ForwardHost)
     $uri = "$apiBaseUri/domains/$DomainID/forwards/$encodedHost"
 
-    if ($PSCmdlet.ShouldProcess("Domain $DomainID forward $ForwardHost", 'Remove')) {
+    if ($PSCmdlet.ShouldProcess("Domain [$DomainID] HTTP forward [$ForwardHost]", 'Remove')) {
         Invoke-DomeneshopApiRequest -Method Delete -Uri $uri -Context $resolvedContext
     }
 }
