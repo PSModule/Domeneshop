@@ -62,11 +62,14 @@ function Invoke-DomeneshopApiRequest {
     )
 
     $params = @{
-        Method         = $Method
-        Uri            = $Uri
-        Authentication = 'Basic'
-        Credential     = $credential
-        ErrorAction    = 'Stop'
+        Method      = $Method
+        Uri         = $Uri
+        Credential  = $credential
+        ErrorAction = 'Stop'
+    }
+
+    if ($PSVersionTable.PSVersion.Major -ge 6) {
+        $params['Authentication'] = 'Basic'
     }
 
     if ($PSBoundParameters.ContainsKey('Body')) {
