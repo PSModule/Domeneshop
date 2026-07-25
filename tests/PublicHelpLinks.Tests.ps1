@@ -36,6 +36,6 @@ Describe 'Public function help links' {
 
         $links.Count | Should -BeGreaterThan 0
         $links[0].Groups['Uri'].Value |
-            Should -Be "https://psmodule.io/Domeneshop/Functions/$DocumentationPath/"
+            Should -Be "https://psmodule.io/Domeneshop/Functions/$DocumentationPath"
     }
 }

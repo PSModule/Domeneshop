@@ -29,7 +29,7 @@ function Set-DomeneshopForward {
         Uses the default context when Context is omitted.
 
         .LINK
-        https://psmodule.io/Domeneshop/Functions/Forwards/Set-DomeneshopForward/
+        https://psmodule.io/Domeneshop/Functions/Forwards/Set-DomeneshopForward
 
         .LINK
         https://api.domeneshop.no/docs/
