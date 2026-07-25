@@ -29,6 +29,9 @@ function Add-DomeneshopForward {
         Uses the default context when Context is omitted.
 
         .LINK
+        https://psmodule.io/Domeneshop/Functions/Add-DomeneshopForward/
+
+        .LINK
         https://api.domeneshop.no/docs/
     #>
     [OutputType([object])]

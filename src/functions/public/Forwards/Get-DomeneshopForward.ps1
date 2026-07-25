@@ -30,6 +30,9 @@ function Get-DomeneshopForward {
         Uses the default context when Context is omitted.
 
         .LINK
+        https://psmodule.io/Domeneshop/Functions/Get-DomeneshopForward/
+
+        .LINK
         https://api.domeneshop.no/docs/
     #>
     [OutputType([object])]

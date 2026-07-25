@@ -32,6 +32,9 @@ function Get-DomeneshopContext {
         The configuration entry used to track the default is excluded from list output.
 
         .LINK
+        https://psmodule.io/Domeneshop/Functions/Get-DomeneshopContext/
+
+        .LINK
         https://psmodule.io/Context/
     #>
     [OutputType([object])]

@@ -25,6 +25,9 @@ function Set-DomeneshopDnsRecord {
         Uses the default context when Context is omitted.
 
         .LINK
+        https://psmodule.io/Domeneshop/Functions/Set-DomeneshopDnsRecord/
+
+        .LINK
         https://api.domeneshop.no/docs/
     #>
     [OutputType([object])]

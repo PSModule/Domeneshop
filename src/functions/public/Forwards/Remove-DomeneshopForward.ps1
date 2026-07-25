@@ -25,6 +25,9 @@ function Remove-DomeneshopForward {
         Uses the default context when Context is omitted.
 
         .LINK
+        https://psmodule.io/Domeneshop/Functions/Remove-DomeneshopForward/
+
+        .LINK
         https://api.domeneshop.no/docs/
     #>
     [OutputType([object])]
