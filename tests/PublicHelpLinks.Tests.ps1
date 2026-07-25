@@ -13,8 +13,9 @@ $publicFunctionsPath = Join-Path -Path $publicFunctionsPath -ChildPath 'public'
 $testCases = Get-ChildItem -Path $publicFunctionsPath -Filter '*.ps1' -Recurse -File |
     Sort-Object -Property FullName |
     ForEach-Object {
-        $relativePath = [IO.Path]::GetRelativePath($publicFunctionsPath, $_.FullName)
-        $relativeDirectory = Split-Path -Path $relativePath -Parent
+        $relativeDirectory = $_.DirectoryName.Remove(0, $publicFunctionsPath.Length).TrimStart(
+            [char[]] @([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar)
+        )
         $documentationPath = if ($relativeDirectory) {
             '{0}/{1}' -f ($relativeDirectory -replace '[\\/]', '/'), $_.BaseName
         } else {
