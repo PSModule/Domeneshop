@@ -20,7 +20,7 @@ function Get-DomeneshopDomain {
         You can't pipe objects to Get-DomeneshopDomain.
 
         .OUTPUTS
-        System.Object[]
+        System.Object
 
         The matching Domeneshop domain records.
 
@@ -30,7 +30,7 @@ function Get-DomeneshopDomain {
         .LINK
         https://api.domeneshop.no/docs/
     #>
-    [OutputType([object[]])]
+    [OutputType([object])]
     [CmdletBinding(DefaultParameterSetName = 'List')]
     param(
         # A domain-name filter for list requests.

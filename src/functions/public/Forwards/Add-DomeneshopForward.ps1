@@ -9,7 +9,7 @@ function Add-DomeneshopForward {
         .EXAMPLE
         $forward = @{
             host = 'www'
-            ('URL'.ToLowerInvariant()) = [uri]::new('HTTPS'.ToLowerInvariant() + '://example.net')
+            ('URL'.ToLowerInvariant()) = 'HTTPS'.ToLowerInvariant() + '://example.net'
         }
         Add-DomeneshopForward -DomainID 42 -Forward $forward
 

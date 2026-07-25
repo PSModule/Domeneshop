@@ -102,4 +102,11 @@ Describe 'Connect-DomeneshopAccount' {
 
         Should -Invoke Set-Context -Times 0 -Exactly
     }
+
+    It 'rejects a whitespace-only context name' {
+        { Connect-DomeneshopAccount -Token 'token' -Secret 'secret' -Context ' ' } |
+            Should -Throw '*Context name cannot be empty or whitespace*'
+
+        Should -Invoke Set-Context -Times 0 -Exactly
+    }
 }

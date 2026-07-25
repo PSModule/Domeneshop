@@ -22,7 +22,7 @@ function Get-DomeneshopInvoice {
         You can't pipe objects to Get-DomeneshopInvoice.
 
         .OUTPUTS
-        System.Object[]
+        System.Object
 
         The matching Domeneshop invoices.
 
@@ -32,7 +32,7 @@ function Get-DomeneshopInvoice {
         .LINK
         https://api.domeneshop.no/docs/
     #>
-    [OutputType([object[]])]
+    [OutputType([object])]
     [CmdletBinding(DefaultParameterSetName = 'List')]
     param(
         # The numeric identifier of a specific invoice.

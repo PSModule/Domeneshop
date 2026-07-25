@@ -33,6 +33,10 @@ function Test-DomeneshopContextName {
         [string] $Context
     )
 
+    if ([string]::IsNullOrWhiteSpace($Context)) {
+        throw 'Context name cannot be empty or whitespace.'
+    }
+
     if ($Context -eq '__Domeneshop.Config') {
         throw "Context name [$Context] is reserved for Domeneshop module configuration."
     }

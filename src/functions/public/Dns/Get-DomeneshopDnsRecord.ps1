@@ -22,7 +22,7 @@ function Get-DomeneshopDnsRecord {
         You can't pipe objects to Get-DomeneshopDnsRecord.
 
         .OUTPUTS
-        System.Object[]
+        System.Object
 
         The matching Domeneshop DNS records.
 
@@ -32,7 +32,7 @@ function Get-DomeneshopDnsRecord {
         .LINK
         https://api.domeneshop.no/docs/
     #>
-    [OutputType([object[]])]
+    [OutputType([object])]
     [CmdletBinding(DefaultParameterSetName = 'List')]
     param(
         # The numeric identifier of the domain that owns the records.

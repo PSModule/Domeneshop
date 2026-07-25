@@ -22,7 +22,7 @@ function Get-DomeneshopForward {
         You can't pipe objects to Get-DomeneshopForward.
 
         .OUTPUTS
-        System.Object[]
+        System.Object
 
         The matching Domeneshop HTTP forwards.
 
@@ -32,7 +32,7 @@ function Get-DomeneshopForward {
         .LINK
         https://api.domeneshop.no/docs/
     #>
-    [OutputType([object[]])]
+    [OutputType([object])]
     [CmdletBinding(DefaultParameterSetName = 'List')]
     param(
         # The numeric identifier of the domain that owns the forwards.
