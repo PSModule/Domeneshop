@@ -75,4 +75,162 @@ Describe 'Domeneshop context and auth flow' {
             $Credential.UserName -eq 'token'
         }
     }
+
+    It 'Get-DomeneshopDomain can get a domain by ID' {
+        Mock Resolve-DomeneshopContext {
+            [pscustomobject]@{
+                ID         = 'demo'
+                Token      = 'token'
+                Secret     = ConvertTo-SecureString -AsPlainText 'secret' -Force
+                ApiBaseUri = 'https://api.domeneshop.no/v0'
+            }
+        }
+        Mock Invoke-DomeneshopApiRequest { @{} }
+
+        { Get-DomeneshopDomain -Context 'demo' -DomainID 42 } | Should -Not -Throw
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
+            $Method -eq 'Get' -and
+            $Uri -eq 'https://api.domeneshop.no/v0/domains/42'
+        }
+    }
+
+    It 'Get-DomeneshopDnsRecord builds list query and endpoint' {
+        Mock Resolve-DomeneshopContext {
+            [pscustomobject]@{
+                ID         = 'demo'
+                Token      = 'token'
+                Secret     = ConvertTo-SecureString -AsPlainText 'secret' -Force
+                ApiBaseUri = 'https://api.domeneshop.no/v0'
+            }
+        }
+        Mock Invoke-DomeneshopApiRequest { @() }
+
+        Get-DomeneshopDnsRecord -DomainID 9 -Host 'www' -Type 'A' -Data '127.0.0.1'
+
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
+            $Method -eq 'Get' -and
+            $Uri -eq 'https://api.domeneshop.no/v0/domains/9/dns?host=www&type=A&data=127.0.0.1'
+        }
+    }
+
+    It 'Get-DomeneshopDnsRecord can get record by ID' {
+        Mock Resolve-DomeneshopContext {
+            [pscustomobject]@{
+                ID         = 'demo'
+                Token      = 'token'
+                Secret     = ConvertTo-SecureString -AsPlainText 'secret' -Force
+                ApiBaseUri = 'https://api.domeneshop.no/v0'
+            }
+        }
+        Mock Invoke-DomeneshopApiRequest { @{} }
+
+        Get-DomeneshopDnsRecord -DomainID 9 -RecordID 3
+
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
+            $Method -eq 'Get' -and
+            $Uri -eq 'https://api.domeneshop.no/v0/domains/9/dns/3'
+        }
+    }
+
+    It 'DNS mutating commands call expected endpoints' {
+        Mock Resolve-DomeneshopContext {
+            [pscustomobject]@{
+                ID         = 'demo'
+                Token      = 'token'
+                Secret     = ConvertTo-SecureString -AsPlainText 'secret' -Force
+                ApiBaseUri = 'https://api.domeneshop.no/v0'
+            }
+        }
+        Mock Invoke-DomeneshopApiRequest { @{} }
+
+        $record = @{ host = 'www'; type = 'A'; data = '127.0.0.1' }
+        Add-DomeneshopDnsRecord -DomainID 9 -Record $record
+        Set-DomeneshopDnsRecord -DomainID 9 -RecordID 3 -Record $record
+        Remove-DomeneshopDnsRecord -DomainID 9 -RecordID 3 -Confirm:$false
+
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
+            $Method -eq 'Post' -and $Uri -eq 'https://api.domeneshop.no/v0/domains/9/dns'
+        }
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
+            $Method -eq 'Put' -and $Uri -eq 'https://api.domeneshop.no/v0/domains/9/dns/3'
+        }
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
+            $Method -eq 'Delete' -and $Uri -eq 'https://api.domeneshop.no/v0/domains/9/dns/3'
+        }
+    }
+
+    It 'Forward commands call expected endpoints' {
+        Mock Resolve-DomeneshopContext {
+            [pscustomobject]@{
+                ID         = 'demo'
+                Token      = 'token'
+                Secret     = ConvertTo-SecureString -AsPlainText 'secret' -Force
+                ApiBaseUri = 'https://api.domeneshop.no/v0'
+            }
+        }
+        Mock Invoke-DomeneshopApiRequest { @{} }
+
+        $forward = @{ host = 'www'; url = 'https://example.net' }
+        Get-DomeneshopForward -DomainID 9
+        Get-DomeneshopForward -DomainID 9 -Host 'www'
+        Add-DomeneshopForward -DomainID 9 -Forward $forward
+        Set-DomeneshopForward -DomainID 9 -Host 'www' -Forward $forward
+        Remove-DomeneshopForward -DomainID 9 -Host 'www' -Confirm:$false
+
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
+            $Method -eq 'Get' -and $Uri -eq 'https://api.domeneshop.no/v0/domains/9/forwards/'
+        }
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
+            $Method -eq 'Get' -and $Uri -eq 'https://api.domeneshop.no/v0/domains/9/forwards/www'
+        }
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
+            $Method -eq 'Post' -and $Uri -eq 'https://api.domeneshop.no/v0/domains/9/forwards/'
+        }
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
+            $Method -eq 'Put' -and $Uri -eq 'https://api.domeneshop.no/v0/domains/9/forwards/www'
+        }
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
+            $Method -eq 'Delete' -and $Uri -eq 'https://api.domeneshop.no/v0/domains/9/forwards/www'
+        }
+    }
+
+    It 'Get-DomeneshopInvoice supports list and by ID' {
+        Mock Resolve-DomeneshopContext {
+            [pscustomobject]@{
+                ID         = 'demo'
+                Token      = 'token'
+                Secret     = ConvertTo-SecureString -AsPlainText 'secret' -Force
+                ApiBaseUri = 'https://api.domeneshop.no/v0'
+            }
+        }
+        Mock Invoke-DomeneshopApiRequest { @() }
+
+        Get-DomeneshopInvoice
+        Get-DomeneshopInvoice -InvoiceID 7
+
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
+            $Method -eq 'Get' -and $Uri -eq 'https://api.domeneshop.no/v0/invoices'
+        }
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
+            $Method -eq 'Get' -and $Uri -eq 'https://api.domeneshop.no/v0/invoices/7'
+        }
+    }
+
+    It 'Update-DomeneshopDdns builds hostname and myip query' {
+        Mock Resolve-DomeneshopContext {
+            [pscustomobject]@{
+                ID         = 'demo'
+                Token      = 'token'
+                Secret     = ConvertTo-SecureString -AsPlainText 'secret' -Force
+                ApiBaseUri = 'https://api.domeneshop.no/v0'
+            }
+        }
+        Mock Invoke-DomeneshopApiRequest { @{} }
+
+        Update-DomeneshopDdns -Hostname 'home.example.com' -MyIP '1.2.3.4'
+
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
+            $Method -eq 'Get' -and $Uri -eq 'https://api.domeneshop.no/v0/dyndns/update?hostname=home.example.com&myip=1.2.3.4'
+        }
+    }
 }
