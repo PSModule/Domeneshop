@@ -25,7 +25,7 @@ function Remove-DomeneshopDnsRecord {
         Uses the default context when Context is omitted.
 
         .LINK
-        https://psmodule.io/Domeneshop/Functions/Remove-DomeneshopDnsRecord/
+        https://psmodule.io/Domeneshop/Functions/Dns/Remove-DomeneshopDnsRecord/
 
         .LINK
         https://api.domeneshop.no/docs/
