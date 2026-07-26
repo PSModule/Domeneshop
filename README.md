@@ -1,69 +1,27 @@
-# {{ NAME }}
+# Domeneshop
 
-{{ DESCRIPTION }}
+Domeneshop is a PowerShell module for interacting with the Domeneshop API.
 
-## Prerequisites
+## Status
 
-This uses the following external resources:
-- The [PSModule framework](https://github.com/PSModule/Process-PSModule) for building, testing and publishing the module.
+The module provides a pre-1.0 API for storing Domeneshop credentials and working with domains, DNS records, HTTP forwards, dynamic DNS, and invoices. Command names and parameters may change before v1.0.0.
 
 ## Installation
 
-To install the module from the PowerShell Gallery, you can use the following command:
-
 ```powershell
-Install-PSResource -Name {{ NAME }}
-Import-Module -Name {{ NAME }}
+Install-PSResource -Name Domeneshop
+Import-Module -Name Domeneshop
 ```
 
-## Usage
+## Commands
 
-Here is a list of example that are typical use cases for the module.
-
-### Example 1: Greet an entity
-
-Provide examples for typical commands that a user would like to do with the module.
-
-```powershell
-Greet-Entity -Name 'World'
-Hello, World!
-```
-
-### Example 2
-
-Provide examples for typical commands that a user would like to do with the module.
-
-```powershell
-Import-Module -Name PSModuleTemplate
-```
-
-### Find more examples
-
-To find more examples of how to use the module, please refer to the [examples](examples) folder.
-
-Alternatively, you can use the Get-Command -Module 'This module' to find more commands that are available in the module.
-To find examples of each of the commands you can use Get-Help -Examples 'CommandName'.
+- [Authentication](src/functions/public/Auth/Auth.md): Store credentials and select a default context.
+- [Domains](src/functions/public/Domains/Domains.md): List domains or retrieve one by ID.
+- [DNS](src/functions/public/Dns/Dns.md): List, add, update, and remove DNS records.
+- [HTTP forwards](src/functions/public/Forwards/Forwards.md): List, add, update, and remove forwards.
+- [Dynamic DNS](src/functions/public/Ddns/Ddns.md): Update a hostname with a supplied or detected address.
+- [Invoices](src/functions/public/Invoices/Invoices.md): List invoices or retrieve one by ID.
 
 ## Documentation
 
-Link to further documentation if available, or describe where in the repository users can find more detailed documentation about
-the module's functions and features.
-
-## Contributing
-
-Coder or not, you can contribute to the project! We welcome all contributions.
-
-### For Users
-
-If you don't code, you still sit on valuable information that can make this project even better. If you experience that the
-product does unexpected things, throw errors or is missing functionality, you can help by submitting bugs and feature requests.
-Please see the issues tab on this project and submit a new issue that matches your needs.
-
-### For Developers
-
-If you do code, we'd love to have your contributions. Please read the [Contribution guidelines](CONTRIBUTING.md) for more information.
-You can either help by picking up an existing issue or submit a new one if you have an idea for a new feature or improvement.
-
-## Acknowledgements
-
-Here is a list of people and projects that helped this project in some way.
+Each public command includes PowerShell help. After importing the module, run `Get-Help <CommandName> -Full` for parameter details and examples.

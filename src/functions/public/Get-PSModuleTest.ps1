@@ -1,23 +1,44 @@
-﻿#Requires -Modules Utilities
-
-function Get-PSModuleTest {
+﻿function Get-PSModuleTest {
     <#
         .SYNOPSIS
-        Performs tests on a module.
+        Get a greeting for a supplied name.
 
         .DESCRIPTION
-        Performs tests on a module.
+        Return a simple greeting used to verify that the module imports and invokes exported commands.
 
         .EXAMPLE
-        Test-PSModule -Name 'World'
+        Get-PSModuleTest -Name 'World'
 
-        "Hello, World!"
+        Get the greeting "Hello, World!".
+
+        .INPUTS
+        None
+
+        You can't pipe objects to Get-PSModuleTest.
+
+        .OUTPUTS
+        System.String
+
+        A greeting containing the supplied name.
+
+        .NOTES
+        This command is retained as the module's baseline smoke-test command.
+
+        .LINK
+        https://psmodule.io/Domeneshop/Functions/Get-PSModuleTest/
+
+        .LINK
+        https://github.com/PSModule/Domeneshop
     #>
+    [OutputType([string])]
     [CmdletBinding()]
-    param (
-        # Name of the person to greet.
+    param(
+        # The name to include in the greeting.
         [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [ValidateScript({ -not [string]::IsNullOrWhiteSpace($_) })]
         [string] $Name
     )
-    Write-Output "Hello, $Name!"
+
+    "Hello, $Name!"
 }
