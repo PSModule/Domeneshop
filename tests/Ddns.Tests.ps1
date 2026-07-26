@@ -11,9 +11,9 @@
 [CmdletBinding()]
 param()
 
-Describe 'Remove-DomeneshopDnsRecord' {
+Describe 'Update-DomeneshopDdns' {
     BeforeAll {
-        . (Join-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -ChildPath 'Domeneshop.TestSetup.ps1')
+        . (Join-Path -Path $PSScriptRoot -ChildPath 'Domeneshop.TestSetup.ps1')
     }
 
     BeforeEach {
@@ -21,17 +21,24 @@ Describe 'Remove-DomeneshopDnsRecord' {
         Mock Invoke-DomeneshopApiRequest {}
     }
 
-    It 'deletes the DNS record endpoint' {
-        Remove-DomeneshopDnsRecord -Context 'demo' -DomainID 42 -RecordID 7 -Confirm:$false
+    It 'builds an escaped hostname and IP query' {
+        Update-DomeneshopDdns -Context 'demo' -Hostname 'home example.com' -MyIP '192.0.2.10'
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 1 -Exactly -ParameterFilter {
-            $Method -eq 'Delete' -and
-            $Uri -eq 'https://api.domeneshop.no/v0/domains/42/dns/7'
+            $Method -eq 'Get' -and
+            $Uri -eq 'https://api.domeneshop.no/v0/dyndns/update?hostname=home%20example.com&myip=192.0.2.10'
         }
     }
 
     It 'does not send a request when WhatIf is specified' {
-        Remove-DomeneshopDnsRecord -Context 'demo' -DomainID 42 -RecordID 7 -WhatIf
+        Update-DomeneshopDdns -Context 'demo' -Hostname 'home.example.com' -WhatIf
+
+        Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
+    }
+
+    It 'rejects whitespace-only hostnames and IP addresses' {
+        { Update-DomeneshopDdns -Context 'demo' -Hostname ' ' } | Should -Throw
+        { Update-DomeneshopDdns -Context 'demo' -Hostname 'home.example.com' -MyIP ' ' } | Should -Throw
 
         Should -Invoke Invoke-DomeneshopApiRequest -Times 0 -Exactly
     }

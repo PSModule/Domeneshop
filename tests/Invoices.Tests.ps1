@@ -13,7 +13,7 @@ param()
 
 Describe 'Get-DomeneshopInvoice' {
     BeforeAll {
-        . (Join-Path -Path (Split-Path -Path $PSScriptRoot -Parent) -ChildPath 'Domeneshop.TestSetup.ps1')
+        . (Join-Path -Path $PSScriptRoot -ChildPath 'Domeneshop.TestSetup.ps1')
     }
 
     BeforeEach {

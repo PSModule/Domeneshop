@@ -8,16 +8,21 @@ $publicFunctionsPath = Join-Path -Path $sourcePath -ChildPath 'functions/public'
 $testCases = Get-ChildItem -Path $publicFunctionsPath -Filter '*.ps1' -Recurse |
     ForEach-Object {
         $relativePath = [IO.Path]::GetRelativePath($publicFunctionsPath, $_.FullName)
+        $group = Split-Path -Path $relativePath -Parent
+        $testFile = if ($group) {
+            "$group.Tests.ps1"
+        } else {
+            "$($_.BaseName).Tests.ps1"
+        }
         @{
             FunctionName = $_.BaseName
-            TestPath     = Join-Path -Path $PSScriptRoot -ChildPath (
-                [IO.Path]::ChangeExtension($relativePath, '.Tests.ps1')
-            )
+            TestFile     = $testFile
+            TestPath     = Join-Path -Path $PSScriptRoot -ChildPath $testFile
         }
     }
 
 Describe 'Public command test layout' {
-    It 'mirrors the public source path for <FunctionName>' -ForEach $testCases {
+    It 'covers <FunctionName> in <TestFile>' -ForEach $testCases {
         Test-Path -LiteralPath $TestPath -PathType Leaf | Should -BeTrue
     }
 }
