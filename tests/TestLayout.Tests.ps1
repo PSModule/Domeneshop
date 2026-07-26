@@ -24,5 +24,7 @@ $testCases = Get-ChildItem -Path $publicFunctionsPath -Filter '*.ps1' -Recurse |
 Describe 'Public command test layout' {
     It 'covers <FunctionName> in <TestFile>' -ForEach $testCases {
         Test-Path -LiteralPath $TestPath -PathType Leaf | Should -BeTrue
+        Get-Content -LiteralPath $TestPath -Raw |
+            Should -Match ([regex]::Escape("Describe '$FunctionName'"))
     }
 }

@@ -190,4 +190,3 @@ Describe 'Get-DomeneshopContext' {
         $result.ID | Should -Be 'demo'
     }
 }
-
